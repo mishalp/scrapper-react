@@ -128,7 +128,7 @@ function App() {
       </div>}
       {(data && !loading) && (
         <>
-          <div id="board" className="p-2 bg-slate-100 shadow-inner">
+          <div id="board" className="p-2 bg-slate-100 shadow-inner max-w-xl overflow-auto">
             <p>YouTube:{data?.youTube?.link}</p>
             <p>Insta:{data?.insta}</p>
             <p>FB:{data?.facebook}</p>
