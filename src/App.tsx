@@ -72,9 +72,7 @@ function App() {
   function copy() {
     navigator.clipboard.writeText(
       `
-      YouTube:${data?.youTube?.link}
-      Insta:${data?.insta}
-      FB:${data?.facebook}
+      YouTube:${data?.youTube?.link}\nInsta:${data?.insta}\nFB:${data?.facebook}
       `
     )
     alert("done")
