@@ -16,11 +16,20 @@ import { useState } from "react"
 import axios from "axios"
 import { Loader2 } from "lucide-react"
 import { Skeleton } from "./components/ui/skeleton"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+
 
 const formSchema = z.object({
   youTubeChannel: z.string().min(2).max(50),
   instagram: z.string().min(2).max(50),
-  facebook: z.string().min(2)
+  facebook: z.string().min(2),
+  ytType: z.string().min(2),
 })
 
 // type YouTubeType = {
@@ -40,7 +49,8 @@ function App() {
     defaultValues: {
       youTubeChannel: "",
       instagram: "",
-      facebook: ""
+      facebook: "",
+      ytType: "videos"
     },
   })
 
@@ -74,19 +84,43 @@ function App() {
     <div className="w-full min-h-screen flex flex-col items-center gap-4 mt-20">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 min-w-96">
-          <FormField
-            control={form.control}
-            name="youTubeChannel"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>YouTube Channel</FormLabel>
+          <div className="flex gap-4">
+            <FormField
+              control={form.control}
+              name="youTubeChannel"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>YouTube Channel</FormLabel>
+                  <FormControl>
+                    <Input placeholder="https://www.youtube.com/@UnmaskingAnomalies" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+                    <FormField
+          control={form.control}
+          name="ytType"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Type</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <Input placeholder="https://www.youtube.com/@UnmaskingAnomalies" {...field} />
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select Type" />
+                  </SelectTrigger>
                 </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+                <SelectContent>
+                  <SelectItem value="videos">Video</SelectItem>
+                  <SelectItem value="shorts">Short</SelectItem>
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+          </div>
           <FormField
             control={form.control}
             name="instagram"
