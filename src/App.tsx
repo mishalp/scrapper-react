@@ -81,9 +81,9 @@ function App() {
   }
 
   return (
-    <div className="w-full min-h-screen flex flex-col items-center gap-4 mt-20">
+    <div className="w-full min-h-screen flex flex-col items-center gap-4 mt-20 px-4">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 min-w-96">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full max-w-sm md:min-w-96">
           <div className="flex gap-4">
             <FormField
               control={form.control}
@@ -162,7 +162,7 @@ function App() {
       </div>}
       {(data && !loading) && (
         <>
-          <div id="board" className="p-2 bg-slate-100 shadow-inner max-w-xl overflow-auto">
+          <div id="board" className="p-2 bg-slate-100 shadow-inner overflow-auto max-w-full">
             <p>YouTube:{data?.youTube?.link}</p>
             <p>Insta:{data?.insta}</p>
             <p>FB:{data?.facebook}</p>
