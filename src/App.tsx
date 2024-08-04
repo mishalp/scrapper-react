@@ -1,4 +1,4 @@
-
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -33,7 +33,7 @@ const formSchema = z.object({
 function App() {
 
   const [loading, setLoading] = useState(false)
-  const [data, setData] = useState<null | object>(null)
+  const [data, setData] = useState<any>(null)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
