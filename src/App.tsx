@@ -26,18 +26,11 @@ import {
 
 
 const formSchema = z.object({
-  youTubeChannel: z.string().min(2).max(50),
-  instagram: z.string().min(2).max(50),
-  facebook: z.string().min(2),
-  ytType: z.string().min(2),
+  ytId: z.string().min(2).max(50),
+  type: z.string().min(2).max(50),
+  username: z.string().min(2),
+  fbId: z.string().min(2),
 })
-
-// type YouTubeType = {
-//   title: string;
-//   thumbnail: string;
-//   link: string;
-// }
-
 
 function App() {
 
@@ -47,19 +40,18 @@ function App() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      youTubeChannel: "",
-      instagram: "",
-      facebook: "",
-      ytType: "videos"
+      ytId: "UC8YFssUAoqhp5SOmYyvQEWQ",
+      type: "Reel",
+      username: "unmasking_anomalies",
+      fbId: "100065838842606"
     },
   })
-
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values)
     setLoading(true)
     try {
-      const res = await axios.post(`${import.meta.env.VITE_API_URL}/scrapper`, values)
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/get-text`, values)
       setData(res.data)
       console.log(res.data)
     } catch (error) {
@@ -69,13 +61,23 @@ function App() {
     }
   }
 
-  function copy() {
-    navigator.clipboard.writeText(
+  async function copy() {
+    await navigator.clipboard.writeText(
       `
-      YouTube:${data?.youTube?.link}\nInsta:${data?.insta}\nFB:${data?.facebook}
-      `
-    )
-    alert("done")
+_${data?.type}_
+
+*${data?.title}*
+        
+*Youtube*: ${data.youTube}
+        
+*FB*: ${data?.facebook}
+        
+*Insta*: ${data?.insta}
+        
+♡ ㅤ    ❍ㅤ     ⌲ 
+ˡᶦᵏᵉ  ᶜᵒᵐᵐᵉⁿᵗ  ˢʰᵃʳᵉ
+*Team U∆*`
+    ).then(() => alert("Copied")).catch(() => alert("Failed to copy"))
   }
 
   return (
@@ -85,43 +87,47 @@ function App() {
           <div className="flex gap-4">
             <FormField
               control={form.control}
-              name="youTubeChannel"
+              name="ytId"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel>YouTube Channel</FormLabel>
+                  <FormLabel>YouTube Channel ID</FormLabel>
                   <FormControl>
-                    <Input placeholder="https://www.youtube.com/@UnmaskingAnomalies" {...field} />
+                    <Input placeholder="ytid" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-                    <FormField
-          control={form.control}
-          name="ytType"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Type</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select Type" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="videos">Video</SelectItem>
-                  <SelectItem value="shorts">Short</SelectItem>
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+            <FormField
+              control={form.control}
+              name="type"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Type</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Type" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="Reel">Reel</SelectItem>
+                      <SelectItem value="Short Video">Short Video</SelectItem>
+                      <SelectItem value="UA Podcast">UA Podcast</SelectItem>
+                      <SelectItem value="Reaction Video">Reaction Video</SelectItem>
+                      <SelectItem value="QnA">QnA</SelectItem>
+                      <SelectItem value="Presentation">Presentation</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
           </div>
           <FormField
             control={form.control}
-            name="instagram"
+            name="username"
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel>Instagram username</FormLabel>
@@ -134,10 +140,10 @@ function App() {
           />
           <FormField
             control={form.control}
-            name="facebook"
+            name="fbId"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel>Facebook URL</FormLabel>
+                <FormLabel>Facebook ID</FormLabel>
                 <FormControl>
                   <Input placeholder="url" {...field} />
                 </FormControl>
@@ -161,9 +167,14 @@ function App() {
       {(data && !loading) && (
         <>
           <div id="board" className="p-2 bg-slate-100 shadow-inner overflow-auto max-w-full">
-            <p>YouTube:{data?.youTube?.link}</p>
-            <p>Insta:{data?.insta}</p>
-            <p>FB:{data?.facebook}</p>
+            <p className="italic">{data?.type}</p><br />
+            <p className="font-bold">{data?.title}</p><br />
+            <p><span className="font-bold">YouTube</span>:{data?.youTube}</p><br />
+            <p><span className="font-bold">FB</span>:{data?.facebook}</p><br />
+            <p><span className="font-bold">Insta</span>:{data?.insta}</p><br />
+            <p>{"♡ ㅤ    ❍ㅤ     ⌲ "}</p>
+            <p>{"ˡᶦᵏᵉ  ᶜᵒᵐᵐᵉⁿᵗ  ˢʰᵃʳᵉ"}</p><br />
+            <p className="font-bold">{"Team U∆"}</p>
           </div>
           <Button onClick={copy}>Copy</Button>
         </>
